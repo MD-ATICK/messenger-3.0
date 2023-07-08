@@ -1,4 +1,3 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -10,13 +9,15 @@ const { addUser } = require('./middleware/socketMiddleware')
 const userModel = require('./models/userModel')
 const chatModel = require('./models/chatModel')
 const messageModel = require('./models/messageModel')
-const port = process.env.port || 4000
+// const port = process.env.port || 4000
+const port = 4000
+
 
 app.use(cors())
 app.use(express.json())
 
 app.get('/', async (req, res) => {
-    res.send({ message: 'hi, hello welcome only you in my dark world !' })
+    res.send({ message: 'hi, hello welcome only you in my dark world 1111 !' })
 })
 app.get('/use', async (req, res) => {
     res.send({ message: 'kire hoi na ken !' })
@@ -26,9 +27,9 @@ app.use(userRouter)
 app.use(chatRouter)
 app.use(messageRouter)
 
+MongooseConnect()
 
 const server = app.listen(port, () => {
-    MongooseConnect()
     console.log(`server is running on http://localhost:${port}`)
 })
 
@@ -36,8 +37,8 @@ const server = app.listen(port, () => {
 // => nijer socket gorun abon jibon bacan <-
 
 const io = require('socket.io')(server, {
-    cors: 'https://64a92e6751fcd5656f4f2eed--coruscating-biscotti-4046bb.netlify.app/'
-    // cors: 'http://localhost:5173'
+    // cors: 'https://64a92e6751fcd5656f4f2eed--coruscating-biscotti-4046bb.netlify.app'
+    cors: 'http://localhost:5173/'
 })
 
 

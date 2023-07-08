@@ -22,7 +22,7 @@ exports.Register = async (req, res) => {
 
     const bcryptPassword = await bcrypt.hash(password, 10)
     const createUser = await userModel.create({ username, email, password: bcryptPassword, avatar })
-    const v3token = jwt.sign({ _id: createUser._id }, process.env.user_secret, { expiresIn: '7d' })
+    const v3token = jwt.sign({ _id: createUser._id }, "messenger_chat_app_v3", { expiresIn: '7d' })
 
     res.status(201).json({ post: 'user created', createUser, v3token })
 }
@@ -42,7 +42,7 @@ exports.Login = async (req, res) => {
         return res.status(404).json({ error: 'Password not matched.' })
     }
 
-    const v3token = jwt.sign({ _id: user._id }, process.env.user_secret, { expiresIn: '7d' })
+    const v3token = jwt.sign({ _id: user._id }, "messenger_chat_app_v3", { expiresIn: '7d' })
 
     res.status(201).json({ post: 'user logined', user, v3token })
 }

@@ -1,4 +1,3 @@
-require('dotenv').config()
 const messageModel = require("../models/messageModel")
 const chatModel = require("../models/chatModel")
 const userModel = require('../models/userModel')

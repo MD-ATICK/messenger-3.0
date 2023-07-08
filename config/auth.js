@@ -1,5 +1,4 @@
 
-require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/userModel')
 
@@ -9,7 +8,7 @@ exports.userAuth = (req, res, next) => {
 
     const token = req.headers.authorization.split(' ')[1]
 
-    jwt.verify(token, process.env.user_secret, async (err, result) => {
+    jwt.verify(token, 'messenger_chat_app_v3', async (err, result) => {
 
         if (err) return res.status(223).json({ error: err.message })
 
