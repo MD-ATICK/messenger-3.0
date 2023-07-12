@@ -23,13 +23,14 @@ exports.chat_allmessages = async (req, res) => {
 
 exports.send_message = async (req, res) => {
 
-    const { content, chat } = req.body
+    const { content } = req.body
+    const { chatid } = req.query
     const sender = req.user
     // console.log('message sent', chat)
 
     let created = await messageModel.create({
         sender: sender._id,
-        chat: chat._id,
+        chat: chatid,
         content
     })
 
@@ -42,7 +43,7 @@ exports.send_message = async (req, res) => {
         select: "username avatar email"
     })
 
-    await chatModel.findByIdAndUpdate(chat._id, { latestMessage: created })
+    await chatModel.findByIdAndUpdate(chatid, { latestMessage: created })
 
     res.status(201).json({ post: 'message created', message: created })
 }

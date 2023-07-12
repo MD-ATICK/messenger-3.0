@@ -3,8 +3,8 @@ const { default: mongoose, model, Schema } = require('mongoose')
 const chatSchema = new Schema({
     chatName: {
         type: String,
-        trim: true ,
-        required : true
+        trim: true,
+        required: true
     },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +22,7 @@ const chatSchema = new Schema({
         type: Boolean,
         default: false
     },
+    unseenMessages: Array
 
 }, { timestamps: true })
 

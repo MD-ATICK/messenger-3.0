@@ -1,5 +1,50 @@
 const chatModel = require("../models/chatModel")
 const userModel = require("../models/userModel")
+const { Objectid } = require('mongoose')
+
+exports.send_message_unseeen_status = async (req, res) => {
+
+    const { thisMessage } = req.body
+    const { chatid } = req.params
+
+
+    let chat = await chatModel.findById(chatid)
+
+    if (!chat) return res.status(400).send({ error: 'chat not found' })
+
+    const updatedchat = await chatModel.findByIdAndUpdate(chatid, {
+        $push: { unseenMessages: thisMessage }
+    })
+
+    res.status(201).json({ put: 'succesed', updatedchat })
+}
+
+
+
+exports.chat_click_unseeen_status = async (req, res) => {
+
+    const { chatid } = req.body
+
+    let chat = await chatModel.findById(chatid)
+        .populate('users', '-password')
+        .populate('latestMessage')
+
+    chat = await userModel.populate(chat, {
+        path: 'latestMessage.sender',
+        select: 'username avatar email'
+    })
+
+    if (!chat) return res.status(400).send({ error: 'chat not found' })
+
+    // const updatedchat = await chatModel.findByIdAndUpdate(chatid, {
+    //     $pull: { unseenMessages: { sender: { $ne: Objectid(req.user._id) } } }
+    // }, { new: true })
+
+    chat.unseenMessages = chat.unseenMessages[0].sender === req.user._id ? chat.unseenMessages : []
+    await chat.save()
+
+    res.status(201).json({ put: 'succesed chat unseen remove', updatedchat: chat })
+}
 
 
 exports.nijer_chats = async (req, res) => {
