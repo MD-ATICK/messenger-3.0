@@ -35,7 +35,7 @@ const server = app.listen(port, () => {
 
 
 const io = require('socket.io')(server, {
-    cors: 'https://coruscating-biscotti-4046bb.netlify.app/'
+    cors: 'https://64b38dc3b301bd05208a1d96--cheerful-lily-bf5f94.netlify.app/'
 })
 
 
