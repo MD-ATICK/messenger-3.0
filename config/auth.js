@@ -7,7 +7,6 @@ exports.userAuth = (req, res, next) => {
     if (!req.headers.authorization) return res.status(223).json({ error: 'token is not correct' })
 
     const token = req.headers.authorization.split(' ')[1]
-    // console.log('token', token)
 
     jwt.verify(token, 'messenger_chat_app_v3', async (err, result) => {
 

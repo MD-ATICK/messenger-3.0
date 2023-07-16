@@ -9,7 +9,6 @@ const { addUser } = require('./middleware/socketMiddleware')
 const userModel = require('./models/userModel')
 const chatModel = require('./models/chatModel')
 const messageModel = require('./models/messageModel')
-// const port = process.env.port || 4000
 const port = 4000
 
 
@@ -34,11 +33,9 @@ const server = app.listen(port, () => {
 })
 
 
-// => nijer socket gorun abon jibon bacan <-
 
 const io = require('socket.io')(server, {
-    cors: 'http://localhost:5173/'
-    // cors: 'https://coruscating-biscotti-4046bb.netlify.app/'
+    cors: 'https://coruscating-biscotti-4046bb.netlify.app/'
 })
 
 
@@ -60,15 +57,6 @@ io.on('connection', (socket) => {
 
     socket.on('join', (chatid) => {
         socket.join(chatid)
-        //<==> now this is worked bro <==>
-        // const room = io.sockets.adapter.rooms.get(chatid);
-        // const updatedroom = Array.from(room)
-        // console.log(updatedroom)
-        // if (updatedroom.length === 2) {
-        //     console.log('ho geya')
-        //     io.to(updatedroom[0]).emit('test', 'aber hoiye jabe')
-        // }
-
     })
 
     socket.on('newFriend', (userid) => {
@@ -94,7 +82,6 @@ io.on('connection', (socket) => {
 
     socket.on('nijerMessageSend', (props) => {
         const { sender, chat, content, createdAt } = props
-        console.log('sound', props)
         const room = io.sockets.adapter.rooms.get(chat._id)
         const updatedroom = Array.from(room)
 
@@ -102,7 +89,6 @@ io.on('connection', (socket) => {
             const oneUser = users.find((user) => user.socketid === updatedroom[0])
             const otherUser = oneUser && chat.users.find((user) => user._id !== oneUser._id)
             const OtherUserOnline = otherUser && users.find((user) => user._id === otherUser._id)
-            console.log(OtherUserOnline)
             OtherUserOnline ? io.to(OtherUserOnline.socketid).emit('unseen', { message: props, chatid: chat._id }) : socket.emit('unseenOfflilne', { message: props, chatid: chat._id })
             return socket.emit('sender', props)
 

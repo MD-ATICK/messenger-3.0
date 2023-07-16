@@ -63,7 +63,6 @@ exports.me = (req, res) => {
 exports.avatarChange = async (req, res) => {
     const { avatar, userid } = req.body
 
-    console.log('ch', avatar)
     const user = await userModel.findById(userid)
     if (!user) return res.status(404).json({ error: 'register to create account!!' })
 

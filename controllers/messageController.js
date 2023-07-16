@@ -26,7 +26,6 @@ exports.send_message = async (req, res) => {
     const { content } = req.body
     const { chatid } = req.query
     const sender = req.user
-    // console.log('message sent', chat)
 
     let created = await messageModel.create({
         sender: sender._id,
