@@ -76,7 +76,6 @@ io.on('connection', (socket) => {
         const second_user = chat.users.find((u) => u._id.toString() !== userid.toString())
         console.log('sUser', second_user)
         const userNew = second_user && users.find((user) => user._id === second_user._id)
-        console.log('socket id', userNew.socketid)
 
         userNew && io.to(userNew.socketid).emit('emptykor', chat._id)
     })
