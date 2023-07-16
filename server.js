@@ -74,10 +74,11 @@ io.on('connection', (socket) => {
     socket.on('unempty', ({ chat, userid }) => {
 
         const second_user = chat.users.find((u) => u._id.toString() !== userid.toString())
-        const { socketid } = users.find((user) => user._id === second_user._id)
-        console.log('socket id', socketid)
+        console.log('sUser', second_user)
+        const userNew = second_user && users.find((user) => user._id === second_user._id)
+        console.log('socket id', userNew.socketid)
 
-        io.to(socketid).emit('emptykor', chat._id)
+        userNew && io.to(userNew.socketid).emit('emptykor', chat._id)
     })
 
     socket.on('nijerMessageSend', (props) => {
