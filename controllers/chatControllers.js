@@ -72,7 +72,7 @@ exports.open_friend_chatbox = async (req, res) => {
     const sender = req.user
     if (!reciver) return res.status(404).json({ error: 'opposite use not found' })
 
-    let older_chat = await chatModel.find({
+    let older_chat = await chatModel.findOne({
         isGroupChat: false,
         $and: [
             { users: { $elemMatch: { $eq: sender._id } } },

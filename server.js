@@ -17,9 +17,6 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', async (req, res) => {
-    await userModel.deleteMany({})
-    await chatModel.deleteMany({})
-    await messageModel.deleteMany({})
     res.send({ message: 'hi, hello welcome only you in my dark world 1111 !' })
 })
 app.get('/use', async (req, res) => {
