@@ -16,7 +16,10 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', async (req, res) => {
-    res.send({ message: 'hi, hello welcome only you in my dark world 1111 !' })
+    // await userModel.deleteMany({})
+    // await chatModel.deleteMany({})
+    // await messageModel.deleteMany({})
+    res.send({ message: 'hi, hello welcome only you in my dark world 1111 hh !' })
 })
 app.get('/use', async (req, res) => {
     res.send({ message: 'kire hoi na ken !' })
@@ -35,7 +38,7 @@ const server = app.listen(port, () => {
 
 
 const io = require('socket.io')(server, {
-    cors: 'https://64b38dc3b301bd05208a1d96--cheerful-lily-bf5f94.netlify.app/'
+    cors: ['https://64b38dc3b301bd05208a1d96--cheerful-lily-bf5f94.netlify.app', 'http://localhost:5173']
 })
 
 

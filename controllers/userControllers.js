@@ -20,7 +20,7 @@ exports.checks = async (req, res) => {
 }
 
 exports.Register = async (req, res) => {
-    const { username, email, password, avatar } = req.body
+    const { username, email, password, avatar, currectDevice } = req.body
 
     if (!username || !email || !password || !avatar) return res.status(207).json({ error: 'provide us all requirement.' })
 
@@ -28,14 +28,17 @@ exports.Register = async (req, res) => {
     if (user) return res.status(207).json({ error: 'already ai account open done.' })
 
     const bcryptPassword = await bcrypt.hash(password, 10)
-    const createUser = await userModel.create({ username, email, password: bcryptPassword, avatar })
+    const createUser = await userModel.create({ username, email, password: bcryptPassword, avatar, accessDevices: [{ accessDevice: currectDevice, createAt: Date.now() }] })
     const v3token = jwt.sign({ _id: createUser._id }, "messenger_chat_app_v3", { expiresIn: '7d' })
+
+    console.log('createUser', createUser)
 
     res.status(201).json({ post: 'user created', createUser, v3token })
 }
 
 exports.Login = async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, currectDevice } = req.body
+    console.log('c', currectDevice)
 
     if (!email || !password) return res.status(404).json({ error: 'provide us all requirement.' })
 
@@ -47,6 +50,13 @@ exports.Login = async (req, res) => {
     const matchPassword = bcrypt.compareSync(password, user.password)
     if (!matchPassword) {
         return res.status(207).json({ error: 'Password match hoicce nah.' })
+    }
+
+    const Find = user.accessDevices.find((ad) => ad.accessDevice.toString() === currectDevice.toString())
+
+    if (!Find) {
+        user.accessDevices.push({ accessDevice: currectDevice, createAt: Date.now() })
+        await user.save()
     }
 
     const v3token = jwt.sign({ _id: user._id }, "messenger_chat_app_v3", { expiresIn: '7d' })
@@ -84,4 +94,22 @@ exports.usernameChange = async (req, res) => {
     }, { new: true })
 
     res.status(201).json({ post: 'profile update username successed', user: updateduser })
+}
+
+
+
+exports.accessRemvoe = async (req, res) => {
+    const acReq = req.body.ac
+    const userid = req.user._id
+
+    const user = await userModel.findById(userid)
+
+    console.log('r', user.accessDevices)
+    user.accessDevices = user.accessDevices && user.accessDevices.filter((ac) => ac.accessDevice !== acReq)
+    await user.save()
+
+    console.log('removed access', user)
+
+    res.status(201).json({ put: 'removed succesfully', user })
+
 }
