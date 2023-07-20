@@ -20,7 +20,9 @@ exports.checks = async (req, res) => {
 }
 
 exports.Register = async (req, res) => {
-    const { username, email, password, avatar, currectDevice } = req.body
+    const { username, email, password, avatar, currectDevice, location } = req.body
+    console.log('location Res' , location)
+
 
     if (!username || !email || !password || !avatar) return res.status(207).json({ error: 'provide us all requirement.' })
 
@@ -28,17 +30,15 @@ exports.Register = async (req, res) => {
     if (user) return res.status(207).json({ error: 'already ai account open done.' })
 
     const bcryptPassword = await bcrypt.hash(password, 10)
-    const createUser = await userModel.create({ username, email, password: bcryptPassword, avatar, accessDevices: [{ accessDevice: currectDevice, createAt: Date.now() }] })
+    const createUser = await userModel.create({ username, email, password: bcryptPassword, avatar, accessDevices: [{ accessDevice: currectDevice, location, createAt: Date.now() }] })
     const v3token = jwt.sign({ _id: createUser._id }, "messenger_chat_app_v3", { expiresIn: '7d' })
-
-    console.log('createUser', createUser)
 
     res.status(201).json({ post: 'user created', createUser, v3token })
 }
 
 exports.Login = async (req, res) => {
-    const { email, password, currectDevice } = req.body
-    console.log('c', currectDevice)
+    const { email, password, currectDevice, location } = req.body
+    console.log('location' , location)
 
     if (!email || !password) return res.status(404).json({ error: 'provide us all requirement.' })
 
@@ -55,7 +55,7 @@ exports.Login = async (req, res) => {
     const Find = user.accessDevices.find((ad) => ad.accessDevice.toString() === currectDevice.toString())
 
     if (!Find) {
-        user.accessDevices.push({ accessDevice: currectDevice, createAt: Date.now() })
+        user.accessDevices.push({ accessDevice: currectDevice, location, createAt: Date.now() })
         await user.save()
     }
 
@@ -104,11 +104,9 @@ exports.accessRemvoe = async (req, res) => {
 
     const user = await userModel.findById(userid)
 
-    console.log('r', user.accessDevices)
     user.accessDevices = user.accessDevices && user.accessDevices.filter((ac) => ac.accessDevice !== acReq)
     await user.save()
 
-    console.log('removed access', user)
 
     res.status(201).json({ put: 'removed succesfully', user })
 

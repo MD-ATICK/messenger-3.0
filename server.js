@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
     // await userModel.deleteMany({})
     // await chatModel.deleteMany({})
     // await messageModel.deleteMany({})
-    res.send({ message: 'hi, hello welcome only you in my dark world 1111 hh !' })
+    res.send({ message: 'hi, seliot dark people~!' })
 })
 app.get('/use', async (req, res) => {
     res.send({ message: 'kire hoi na ken !' })
@@ -38,7 +38,7 @@ const server = app.listen(port, () => {
 
 
 const io = require('socket.io')(server, {
-    cors: ['https://64b38dc3b301bd05208a1d96--cheerful-lily-bf5f94.netlify.app', 'http://localhost:5173']
+    cors: ['https://cheerful-lily-bf5f94.netlify.app', 'http://localhost:5173']
 })
 
 
@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
 
     socket.on('addUser', (user) => {
         addUser(users, user, socket.id)
-        io.emit('sobUsers', users)
+        io.emit('sobUsers', { users, activeUser: user })
     })
 
     socket.on('join', (chatid) => {
@@ -77,7 +77,6 @@ io.on('connection', (socket) => {
     socket.on('unempty', ({ chat, userid }) => {
 
         const second_user = chat.users.find((u) => u._id.toString() !== userid.toString())
-        console.log('sUser', second_user)
         const userNew = second_user && users.find((user) => user._id === second_user._id)
 
         userNew && io.to(userNew.socketid).emit('emptykor', chat._id)
@@ -119,6 +118,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', () => {
+        const user = users.find((u) => u.socketid === socket.id)
+        io.emit('offlineUser_15m', user)
         console.log('disconnected at', socket.id)
         users = users.filter((user) => user.socketid !== socket.id)
         io.emit('pullUsers', users)
