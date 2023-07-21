@@ -19,6 +19,30 @@ exports.send_message_unseeen_status = async (req, res) => {
     res.status(201).json({ put: 'succesed', updatedchat })
 }
 
+exports.chatBlocked = async (req, res) => {
+
+    const { chatid, blockCondition } = req.body
+
+    if (blockCondition) {
+        const blockChat = await chatModel.findByIdAndUpdate(chatid, {
+            chatBlockedBy: req.user._id,
+            lastBlockAt: Date.now()
+        }, { new: true }).populate('users', '-password')
+            .populate('latestMessage')
+
+        return res.status(201).json({ put: "Chat Blocked" , condition : true, chat: blockChat })
+    }
+
+    const unBlockChat = await chatModel.findByIdAndUpdate(chatid, {
+        chatBlockedBy: 'none',
+    }, { new: true }).populate('users', '-password')
+        .populate('latestMessage')
+
+
+    return res.status(201).json({ put: "Chat unBlocked" , condition : false, chat: unBlockChat })
+
+}
+
 
 
 exports.chat_click_unseeen_status = async (req, res) => {
@@ -92,7 +116,8 @@ exports.open_friend_chatbox = async (req, res) => {
     let created_chat = await chatModel.create({
         isGroupChat: false,
         chatName: reciver.username,
-        users: [sender._id, reciver._id]
+        users: [sender._id, reciver._id],
+        chatBlockedBy: 'none'
     })
     created_chat = await chatModel.findById(created_chat._id).populate('users', '-password')
 

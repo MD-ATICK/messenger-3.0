@@ -19,10 +19,7 @@ app.get('/', async (req, res) => {
     // await userModel.deleteMany({})
     // await chatModel.deleteMany({})
     // await messageModel.deleteMany({})
-    res.send({ message: 'hi, seliot dark people~!' })
-})
-app.get('/use', async (req, res) => {
-    res.send({ message: 'kire hoi na ken !' })
+    res.send({ message: 'hi, you come in dark chat!!' })
 })
 
 app.use(userRouter)
@@ -93,10 +90,8 @@ io.on('connection', (socket) => {
             const OtherUserOnline = otherUser && users.find((user) => user._id === otherUser._id)
             OtherUserOnline ? io.to(OtherUserOnline.socketid).emit('unseen', { message: props, chatid: chat._id }) : socket.emit('unseenOfflilne', { message: props, chatid: chat._id })
             return socket.emit('sender', props)
-
-            // socket.broadcast.to(chat._id).emit('reciveMessage', props)
-            // return socket.broadcast.to(chat._id).emit('test', props)
         }
+
         socket.broadcast.to(chat._id).emit('reciveMessage', { sender: { _id: sender }, chat, content, createdAt })
         socket.broadcast.to(chat._id).emit('test', props)
     })
@@ -117,8 +112,23 @@ io.on('connection', (socket) => {
         io.emit('offlineUser', elseusers)
     })
 
+    socket.on('blockStatus', ({ chat, user }) => {
+        const room_users = Array.from(io.sockets.adapter.rooms.get(chat._id))
+        console.log('room mmm', room_users)
+        if (room_users.length === 1) {
+            const anotherUser = chat.users.find((u) => u._id !== user._id)
+            const anotherUser_online_check = anotherUser && users.find((u) => u._id === anotherUser._id)
+            if (anotherUser_online_check) {
+                return io.to(anotherUser_online_check.socketid).emit('responseBlockStatus', chat)
+            }
+        }
+
+        socket.broadcast.to(chat._id).emit('responseBlockStatus', chat)
+    })
+
     socket.on('disconnect', () => {
         const user = users.find((u) => u.socketid === socket.id)
+        console.log('disconnect user', user)
         io.emit('offlineUser_15m', user)
         console.log('disconnected at', socket.id)
         users = users.filter((user) => user.socketid !== socket.id)

@@ -22,7 +22,14 @@ const chatSchema = new Schema({
         type: Boolean,
         default: false
     },
-    unseenMessages: Array
+    unseenMessages: Array,
+    chatBlockedBy: {
+        type: String,
+    },
+    lastBlockAt: {
+        type: Date,
+        default: Date.now()
+    }
 
 }, { timestamps: true })
 
