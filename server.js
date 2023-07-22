@@ -113,16 +113,12 @@ io.on('connection', (socket) => {
     })
 
     socket.on('blockStatus', ({ chat, user }) => {
-        const room_users = Array.from(io.sockets.adapter.rooms.get(chat._id))
-        console.log('room mmm', room_users)
-        if (room_users.length === 1) {
-            const anotherUser = chat.users.find((u) => u._id !== user._id)
-            const anotherUser_online_check = anotherUser && users.find((u) => u._id === anotherUser._id)
-            if (anotherUser_online_check) {
-                return io.to(anotherUser_online_check.socketid).emit('responseBlockStatus', chat)
-            }
+        const anotherUser = chat.users.find((u) => u._id !== user._id)
+        const anotherUser_online_check = anotherUser && users.find((u) => u._id === anotherUser._id)
+        console.log({ anotherUser_online_check })
+        if (anotherUser_online_check) {
+            return io.to(anotherUser_online_check.socketid).emit('responseBlockStatus', chat)
         }
-
         socket.broadcast.to(chat._id).emit('responseBlockStatus', chat)
     })
 
