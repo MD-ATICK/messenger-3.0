@@ -121,9 +121,12 @@ io.on('connection', (socket) => {
         socket.broadcast.to(chat._id).emit('responseBlockStatus', chat)
     })
 
+    // socket.on('hash', () => {
+    //     io.emit('offlineUser_15m', socket.id)
+    // })
+
     socket.on('disconnect', () => {
-        const user = users.find((u) => u.socketid === socket.id)
-        io.emit('offlineUser_15m', user)
+        // io.emit('offlineUser_15m', socket.id)
         console.log('disconnected at', socket.id)
         users = users.filter((user) => user.socketid !== socket.id)
         io.emit('pullUsers', users)
