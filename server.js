@@ -115,7 +115,6 @@ io.on('connection', (socket) => {
     socket.on('blockStatus', ({ chat, user }) => {
         const anotherUser = chat.users.find((u) => u._id !== user._id)
         const anotherUser_online_check = anotherUser && users.find((u) => u._id === anotherUser._id)
-        console.log({ anotherUser_online_check })
         if (anotherUser_online_check) {
             return io.to(anotherUser_online_check.socketid).emit('responseBlockStatus', chat)
         }
@@ -124,7 +123,6 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         const user = users.find((u) => u.socketid === socket.id)
-        console.log('disconnect user', user)
         io.emit('offlineUser_15m', user)
         console.log('disconnected at', socket.id)
         users = users.filter((user) => user.socketid !== socket.id)

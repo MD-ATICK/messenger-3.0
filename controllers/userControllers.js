@@ -21,7 +21,8 @@ exports.checks = async (req, res) => {
 
 exports.Register = async (req, res) => {
     const { username, email, password, avatar, currectDevice, location } = req.body
-    console.log('location Res' , location)
+
+    console.log('user Register run')
 
 
     if (!username || !email || !password || !avatar) return res.status(207).json({ error: 'provide us all requirement.' })
@@ -38,8 +39,8 @@ exports.Register = async (req, res) => {
 
 exports.Login = async (req, res) => {
     const { email, password, currectDevice, location } = req.body
-    console.log('location' , location)
 
+    console.log('user Login run')
     if (!email || !password) return res.status(404).json({ error: 'provide us all requirement.' })
 
     const user = await userModel.findOne({ email })
@@ -66,6 +67,7 @@ exports.Login = async (req, res) => {
 
 
 exports.me = (req, res) => {
+    console.log('auth User run')
     res.status(200).json({ get: 'me details showed', user: req.user })
 }
 
