@@ -10,7 +10,7 @@ const userModel = require('./models/userModel')
 const chatModel = require('./models/chatModel')
 const messageModel = require('./models/messageModel')
 const port = 4000
-
+const { Server } = require('socket.io')
 
 app.use(cors())
 app.use(express.json())
@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
     // await userModel.deleteMany({})
     // await chatModel.deleteMany({})
     // await messageModel.deleteMany({})
-    res.send({ message: 'hi, you come in dark chat!!' })
+    res.send({ message: 'hi, you come in dark chat >>>4 faltu!!' })
 })
 
 app.use(userRouter)
@@ -31,8 +31,6 @@ MongooseConnect()
 const server = app.listen(port, () => {
     console.log(`server is running on http://localhost:${port}`)
 })
-
-
 
 const io = require('socket.io')(server, {
     cors: ['https://cheerful-lily-bf5f94.netlify.app', 'http://localhost:5173']

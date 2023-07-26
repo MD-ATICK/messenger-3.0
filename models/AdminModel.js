@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose')
 
 
-const userSchema = new Schema({
+const userMainSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -9,6 +9,7 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -18,7 +19,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    accessDevices: Array,
+    location: {
+        type: String,
+        required: true
+    },
     restriction: {
         type: Boolean,
         default: false
@@ -27,5 +31,5 @@ const userSchema = new Schema({
     timestamps: true
 })
 
-const userModel = model('users', userSchema)
-module.exports = userModel;
+const userMainModel = model('adminusers', userMainSchema)
+module.exports = userMainModel;

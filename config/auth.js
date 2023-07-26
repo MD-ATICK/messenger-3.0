@@ -20,3 +20,6 @@ exports.userAuth = (req, res, next) => {
 
     })
 }
+
+// https://faltu-server-side-dwxnwmual-md-atick.vercel.app/
+// socket = io('https://mesender-serverside-3-0.onrender.com')
