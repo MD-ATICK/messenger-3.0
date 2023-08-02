@@ -33,7 +33,7 @@ const server = app.listen(port, () => {
 })
 
 const io = require('socket.io')(server, {
-    cors: ['https://cheerful-lily-bf5f94.netlify.app', 'http://localhost:5173']
+    cors: ['https://amazing-youtiao-f69577.netlify.app', 'http://localhost:5173']
 })
 
 
