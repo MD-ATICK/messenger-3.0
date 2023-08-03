@@ -9,7 +9,6 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "./server.js",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
@@ -27,7 +26,18 @@
                     "key": "Access-Control-Allow-Headers",
                     "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
                 }
-            ]
+            ],
+            "dest": "./server.js"
+        },
+        {
+            "src": "/(.*)",
+            "headers": [
+                {
+                    "key": "Custom-Global-Header",
+                    "value": "Some Value"
+                }
+            ],
+            "dest": "./server.js"
         }
     ]
 }
