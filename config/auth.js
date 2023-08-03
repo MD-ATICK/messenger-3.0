@@ -21,5 +21,5 @@ exports.userAuth = (req, res, next) => {
     })
 }
 
-// https://sudu-mren-chat-app-3-0.onrender.com/
-// socket = io('https://sudu-mren-chat-app-3-0.onrender.com')
+// https://sudu-chat-app-3.vercel.app/
+// socket = io('https://sudu-chat-app-3.vercel.app')
