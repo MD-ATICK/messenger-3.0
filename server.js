@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const cors = require('cors')
+// const cors = require('cors')
 const userRouter = require('./routes/userRoute')
 const chatRouter = require('./routes/chatRoute')
 const messageRouter = require('./routes/messageRoute')
@@ -12,14 +12,24 @@ const messageModel = require('./models/messageModel')
 const port = 4000
 const { Server } = require('socket.io')
 
-app.use(cors())
+
+res.setHeader('Access-Control-Allow-Credentials', true)
+res.setHeader('Access-Control-Allow-Origin', '*')
+// res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+)
+
+// app.use(cors())
 app.use(express.json())
 
 app.get('/', async (req, res) => {
     // await userModel.deleteMany({})
     // await chatModel.deleteMany({})
     // await messageModel.deleteMany({})
-    res.send({ message: 'hi, you come in dark chat >>>4 faltu!!' })
+    res.send({ message: 'hi, you come in dark chat >>>5 faltu!!' })
 })
 
 app.use(userRouter)

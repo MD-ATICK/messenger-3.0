@@ -21,5 +21,5 @@ exports.userAuth = (req, res, next) => {
     })
 }
 
-// https://messenger-app-server-3.vercel.app/
-// socket = io('https://messenger-app-server-3.vercel.app')
+// https://sudu-mren-chat-app-3-0.onrender.com/
+// socket = io('https://sudu-mren-chat-app-3-0.onrender.com')
