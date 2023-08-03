@@ -28,9 +28,9 @@ app.use(userRouter)
 app.use(chatRouter)
 app.use(messageRouter)
 
+MongooseConnect()
 
 const server = app.listen(port, () => {
-    MongooseConnect()
     console.log(`server is running on http://localhost:${port}`)
 })
 
